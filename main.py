@@ -48,7 +48,7 @@ if ytd_close < before_ytd_close:
 else:
     INDICATOR = "🔺"
 
-if percentage_diff > 5:
+if percentage_diff > 0:
     # News
     news_response = requests.get(url=NEWS_ENDPOINT, params=NEWS_PARAMS)
     news_response.raise_for_status()

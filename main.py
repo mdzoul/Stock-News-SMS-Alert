@@ -2,6 +2,7 @@
 This code will return 3 article headlines via SMS
 if TSLA stock has increased or decreased by 5%
 """
+import os
 import requests
 from twilio.rest import Client
 
@@ -10,7 +11,7 @@ STOCK_NAME = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 
 STOCK_ENDPOINT = "https://www.alphavantage.co/query"
-STOCK_API_KEY = " T9PIYTEYNIB0OACU"
+STOCK_API_KEY = os.environ.get("STOCK_API_KEY")
 STOCK_PARAMS = {
     "function": "TIME_SERIES_DAILY",
     "symbol": STOCK_NAME,
@@ -18,13 +19,15 @@ STOCK_PARAMS = {
 }
 
 NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
-NEWS_API_KEY = "5641c04f5d704c55a15234e4a4ebd0d3"
+NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 NEWS_PARAMS = {
     "apiKey": NEWS_API_KEY,
     "qInTitle": COMPANY_NAME,
 }
-TWILIO_ACCOUNT_SID = "AC3759af84b38e8b8c8db11d9d3e01f43a"
-TWILIO_AUTH_TOKEN = "65d4359bc6fca2d153f79732249f8b9d"
+TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
+FROM_NUM = os.environ.get("FROM_NUM")
+TO_NUM = os.environ.get("TO_NUM")
 
 # -------------------- MAIN BODY -------------------- #
 # Stock
@@ -61,7 +64,7 @@ if percentage_diff > 5:
     for article in formatted_articles:
         message = client.messages.create(
             body=f"""{STOCK_NAME}: {INDICATOR}{percentage_diff}%\n{article}""",
-            from_='+19034833039',
-            to='+6582289433'
+            from_=FROM_NUM,
+            to=TO_NUM
         )
         print(message.status)
